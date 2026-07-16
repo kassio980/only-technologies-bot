@@ -15,30 +15,18 @@ while(!cfg) { require('child_process').execSync('sleep 0.4'); cfg = ld() }
 const DONO_ID = process.env.DONO_ID || '1504181533353705675';
 const SRV_ID = process.env.SERVIDOR_ID || '1525498594851950692';
 const CAT_TICKET = '1527330289716560023';
-const CARGOS_SUPORTE = [
-'1527332940978323658',
-'1527333815574335690',
-'1527332253963915464',
-'1527331859862786110',
-'1527331648687968408'
-];
+const CARGOS_SUPORTE = ['1527332940978323658','1527333815574335690','1527332253963915464','1527331859862786110','1527331648687968408'];
 const TOKEN_USAR = process.env.TOKEN_TICKET || '';
 let contador = 1;
 
 const client = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent,
-    GatewayIntentBits.GuildMembers
-  ],
+  intents: [GatewayIntentBits.Guilds,GatewayIntentBits.GuildMessages,GatewayIntentBits.MessageContent,GatewayIntentBits.GuildMembers],
   partials: [Partials.Channel]
 });
 
 client.on('guildCreate', async g => { if(g.id !== SRV_ID) await g.leave().catch(()=>{}) });
-
-client.on("guildMemberAdd", (member) => { console.log(`${member.user.tag} entrou no servidor!`); });
-client.on("guildMemberRemove", (member) => { console.log(`${member.user.tag} saiu do servidor!`); });
+client.on("guildMemberAdd", m => console.log(`${m.user.tag} entrou no servidor!`));
+client.on("guildMemberRemove", m => console.log(`${m.user.tag} saiu do servidor!`));
 
 client.on('messageCreate', async (message) => {
   if(message.author.bot) return;
@@ -50,7 +38,7 @@ client.on('messageCreate', async (message) => {
   if (cmd === "!ping") return message.reply("🏓 Pong!");
   if(cmd_exato === '!TICKET') {
     const botoes = new ActionRowBuilder().addComponents(
-      new ButtonBuilder().setCustomId('ticket_duvida').setLabel('❓ Dúvida').setStyle(ButtonStyle.Primary),
+      new ButtonBuilder().setCustomId('ticket_duvida').setLabel('❓ Duvida').setStyle(ButtonStyle.Primary),
       new ButtonBuilder().setCustomId('ticket_suporte').setLabel('🛠️ Suporte').setStyle(ButtonStyle.Success),
       new ButtonBuilder().setCustomId('ticket_outro').setLabel('📩 Outro').setStyle(ButtonStyle.Secondary)
     );
@@ -58,7 +46,7 @@ client.on('messageCreate', async (message) => {
   }
 
   if(cmd === '!hub') return message.reply({embeds:[new EmbedBuilder().setColor('#22c55e').setTitle('🤖 HUB ONLINE')]});
-  if(cmd === '!veri') return message.reply({embeds:[new EmbedBuilder().setColor('#3b82f6').setTitle('🛡️ VERIFICAÇÃO')]});
+  if(cmd === '!veri') return message.reply({embeds:[new EmbedBuilder().setColor('#3b82f6').setTitle('🛡️ VERIFICACAO')]});
   if(cmd === '!ia') return message.reply({embeds:[new EmbedBuilder().setColor('#8b5cf6').setTitle('🧠 IA')]});
   if(cmd === '!status') return message.reply({embeds:[new EmbedBuilder().setColor('#f59e0b').setTitle('📊 SISTEMA')]});
   if(cmd === '!clonar') return message.reply({embeds:[new EmbedBuilder().setColor('#ec4899').setTitle('📂 CLONAGEM')]});
@@ -80,7 +68,7 @@ client.on("interactionCreate", async (inter) => {
   if(inter.user.id !== DONO_ID) return;
 
   if (inter.isChatInputCommand() && inter.commandName === "ping") return inter.reply("🏓 Pong!");
-  if (inter.isButton() && inter.customId === "verificar") return inter.reply({ content: "✅ Você clicou no botão!", ephemeral: true });
+  if (inter.isButton() && inter.customId === "verificar") return inter.reply({ content: "✅ Voce clicou no botao!", ephemeral: true });
 
   if(inter.customId.startsWith('ticket_')){
     await inter.deferReply({ephemeral:true});
@@ -133,13 +121,13 @@ client.on("interactionCreate", async (inter) => {
 });
 
 client.once("clientReady", async () => {
-  console.log(`${client.user.tag} está online!`);
+  console.log(`${client.user.tag} esta online!`);
   console.log('🟢 07 TICKETS | !TICKET EXCLUSIVO + SISTEMA COMPLETO');
   client.user.setActivity('ONLY · TICKETS',{type:3});
   try{
     const voce = await client.users.fetch(DONO_ID);
     await voce.send({content:`🟢 **07 TICKETS INICIADO COM SUCESSO**`});
-    await voce.send({embeds:[new EmbedBuilder().setColor('#eab308').setTitle('📋 COMANDOS - TICKETS').setDescription('`!TICKET` → Abre o painel de atendimento\n`!ping` → Testa conexão\n`!hub` → Hub geral\n`!veri` → Verificação\n`!ia` → Inteligência\n`!status` → Ver sistema\n`!clonar` → Clonagem\n`!cria` → Criador\n`!painel` → Painel\n`!adm` → Administrador')]});
+    await voce.send({embeds:[new EmbedBuilder().setColor('#eab308').setTitle('📋 COMANDOS - TICKETS').setDescription("!TICKET - Abre o painel de atendimento\n!ping - Testa conexao\n!hub - Hub geral\n!veri - Verificacao\n!ia - Inteligencia\n!status - Ver sistema\n!clonar - Clonagem\n!cria - Criador\n!painel - Painel\n!adm - Administrador")]});
   }catch{}
 });
 

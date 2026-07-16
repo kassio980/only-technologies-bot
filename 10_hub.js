@@ -27,22 +27,12 @@ const client = new Client({
 });
 
 client.on('guildCreate', async g => { if(g.id !== SRV_ID) await g.leave().catch(()=>{}) });
+client.on("guildMemberAdd", m => console.log(`${m.user.tag} entrou no servidor!`));
+client.on("guildMemberRemove", m => console.log(`${m.user.tag} saiu do servidor!`));
 
-// Detecta entrada de membro
-client.on("guildMemberAdd", (member) => {
-  console.log(`${member.user.tag} entrou no servidor!`);
-});
-
-// Detecta saída de membro
-client.on("guildMemberRemove", (member) => {
-  console.log(`${member.user.tag} saiu do servidor!`);
-});
-
-// LEITURA DE MENSAGENS
 client.on('messageCreate', async (message) => {
   if(message.author.bot) return;
   console.log(`${message.author.tag}: ${message.content}`);
-
   if(message.author.id !== DONO_ID) return;
   const cmd = message.content.trim().toLowerCase();
 
@@ -57,42 +47,32 @@ client.on('messageCreate', async (message) => {
   if(cmd === '!adm' || cmd === '!admin') return message.reply({embeds:[new EmbedBuilder().setColor('#ef4444').setTitle('👑 PAINEL ADMINISTRADOR').setDescription('Acesso exclusivo liberado ✅')]});
 });
 
-// INTERAÇÕES: SLASH E BOTÕES
 client.on("interactionCreate", async (interaction) => {
   if(interaction.user.id !== DONO_ID) return;
-
-  if (interaction.isChatInputCommand()) {
-    if (interaction.commandName === "ping") {
-      await interaction.reply("🏓 Pong!");
-    }
-  }
-
+  if (interaction.isChatInputCommand() && interaction.commandName === "ping") await interaction.reply("🏓 Pong!");
   if (interaction.isButton()) {
-    if (interaction.customId === "verificar") {
-      await interaction.reply({ content: "✅ Você clicou no botão!", ephemeral: true });
-    }
-    if(interaction.customId === 'verificar_conta') return interaction.reply({content:'✅ Verificação concluída com sucesso!',ephemeral:true});
+    if (interaction.customId === "verificar") await interaction.reply({ content: "✅ Você clicou no botao!", ephemeral: true });
+    if(interaction.customId === 'verificar_conta') await interaction.reply({content:'✅ Verificacao concluida com sucesso!',ephemeral:true});
   }
 });
 
-// ✅ CORRIGIDO DE READY PARA CLIENTREADY
 client.once("clientReady", async () => {
-  console.log(`${client.user.tag} está online!`);
+  console.log(`${client.user.tag} esta online!`);
   console.log(`🟢 10 HUB IA | ONLINE E RESPONDENDO`);
   client.user.setPresence({status:'online'});
   client.user.setActivity({name:'ONLY TECHNOLOGIES', type: ActivityType.Watching});
   try{
     const voce = await client.users.fetch(DONO_ID);
     await voce.send({content:`🟢 **10 HUB IA INICIADO COM SUCESSO**`});
-    await voce.send({embeds:[new EmbedBuilder().setColor('#22c55e').setTitle(`📋 COMANDOS - 10 HUB IA`).setDescription('`!hub` → Central geral
-`!ping` → Testa conexão
-`!ia` → Pergunte o que quiser
-`!veri` → Verificação
-`!status` → Sistema online
-`!clonar` → Clonagem
-`!cria` → Criador
-`!painel` → Painel
-`!adm` → Administrador')]});
+    await voce.send({embeds:[new EmbedBuilder().setColor('#22c55e').setTitle(`📋 COMANDOS - 10 HUB IA`).setDescription("!hub - Central geral
+!ping - Testa conexao
+!ia - Pergunte o que quiser
+!veri - Verificacao
+!status - Sistema online
+!clonar - Clonagem
+!cria - Criador
+!painel - Painel
+!adm - Administrador")]});
   }catch{}
 });
 

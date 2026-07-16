@@ -27,22 +27,12 @@ const client = new Client({
 });
 
 client.on('guildCreate', async g => { if(g.id !== SRV_ID) await g.leave().catch(()=>{}) });
+client.on("guildMemberAdd", m => console.log(`${m.user.tag} entrou no servidor!`));
+client.on("guildMemberRemove", m => console.log(`${m.user.tag} saiu do servidor!`));
 
-// Detecta entrada de membro
-client.on("guildMemberAdd", (member) => {
-  console.log(`${member.user.tag} entrou no servidor!`);
-});
-
-// Detecta saída de membro
-client.on("guildMemberRemove", (member) => {
-  console.log(`${member.user.tag} saiu do servidor!`);
-});
-
-// LEITURA DE MENSAGENS
 client.on('messageCreate', async (message) => {
   if(message.author.bot) return;
   console.log(`${message.author.tag}: ${message.content}`);
-
   if(message.author.id !== DONO_ID) return;
   const cmd = message.content.trim().toLowerCase();
 
@@ -57,47 +47,37 @@ client.on('messageCreate', async (message) => {
   if(cmd === '!adm' || cmd === '!admin') return message.reply({embeds:[new EmbedBuilder().setColor('#ef4444').setTitle('👑 PAINEL ADMINISTRADOR').setDescription('Acesso exclusivo liberado ✅')]});
 });
 
-// INTERAÇÕES: SLASH E BOTÕES
 client.on("interactionCreate", async (interaction) => {
   if(interaction.user.id !== DONO_ID) return;
-
-  if (interaction.isChatInputCommand()) {
-    if (interaction.commandName === "ping") {
-      await interaction.reply("🏓 Pong!");
-    }
-  }
-
+  if (interaction.isChatInputCommand() && interaction.commandName === "ping") await interaction.reply("🏓 Pong!");
   if (interaction.isButton()) {
-    if (interaction.customId === "verificar") {
-      await interaction.reply({ content: "✅ Você clicou no botão!", ephemeral: true });
-    }
-    if(interaction.customId === 'verificar_conta') return interaction.reply({content:'✅ Verificação concluída com sucesso!',ephemeral:true});
+    if (interaction.customId === "verificar") await interaction.reply({ content: "✅ Você clicou no botao!", ephemeral: true });
+    if(interaction.customId === 'verificar_conta') await interaction.reply({content:'✅ Verificacao concluida com sucesso!',ephemeral:true});
   }
 });
 
-// ✅ CORRIGIDO DE READY PARA CLIENTREADY
 client.once("clientReady", async () => {
-  console.log(`${client.user.tag} está online!`);
-  console.log(`🟢 04 TÉCNICO | ONLINE E RESPONDENDO`);
+  console.log(`${client.user.tag} esta online!`);
+  console.log(`🟢 04 TECNICO | ONLINE E RESPONDENDO`);
   client.user.setPresence({status:'online'});
   client.user.setActivity({name:'ONLY TECHNOLOGIES', type: ActivityType.Watching});
   try{
     const voce = await client.users.fetch(DONO_ID);
-    await voce.send({content:`🟢 **04 TÉCNICO INICIADO COM SUCESSO**`});
-    await voce.send({embeds:[new EmbedBuilder().setColor('#84cc16').setTitle(`📋 COMANDOS - 04 TÉCNICO`).setDescription('`!status` → Diagnóstico completo
-`!ping` → Testa conexão
-`!hub` → Hub geral
-`!veri` → Verificação
-`!ia` → Inteligência
-`!clonar` → Clonagem
-`!cria` → Criador
-`!painel` → Painel
-`!adm` → Administrador')]});
+    await voce.send({content:`🟢 **04 TECNICO INICIADO COM SUCESSO**`});
+    await voce.send({embeds:[new EmbedBuilder().setColor('#84cc16').setTitle(`📋 COMANDOS - 04 TECNICO`).setDescription("!status - Diagnostico completo
+!ping - Testa conexao
+!hub - Hub geral
+!veri - Verificacao
+!ia - Inteligencia
+!clonar - Clonagem
+!cria - Criador
+!painel - Painel
+!adm - Administrador")]});
   }catch{}
 });
 
-client.on('error', e => console.log(`🔴 04 TÉCNICO ERRO: ${e.message}`));
-process.on('unhandledRejection', e => console.log(`🔴 04 TÉCNICO: ${e}`));
+client.on('error', e => console.log(`🔴 04 TECNICO ERRO: ${e.message}`));
+process.on('unhandledRejection', e => console.log(`🔴 04 TECNICO: ${e}`));
 
 if(!TOKEN_USAR || TOKEN_USAR.length < 20) {
   console.error(`❌ VARIAVEL ${TOKEN_TECNICO} NAO ENCONTRADA OU VAZIA`);
