@@ -1,0 +1,17 @@
+# 🔴 NUNCA ENVIAR — BLOQUEIO TOTAL ABSOLUTO
+_config.js
+**/_config.js
+.env
+.env.*
+BACKUP*/
+backup*/
+*.log
+*.BACKUP*
+*.BKP*
+tudo.js
+tudo.js.*
+*.old
+*.bak
+node_modules/
+.DS_Store
+package-lock.json
