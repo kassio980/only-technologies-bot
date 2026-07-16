@@ -1,18 +1,10 @@
-const {Client,GatewayIntentBits,ModalBuilder,TextInputBuilder,ActionRowBuilder,TextInputStyle,Partials}=require('discord.js')
-const C=require('./_config'),{EMB}=require('./_estilo'),fs=require('fs'),ax=require('axios')
-const b=new Client({intents:[Object.values(GatewayIntentBits)],partials:[Partials.Message,Partials.Channel,Partials.GuildMember]})
-const db={lim:{}}
-b.on('ready',()=>console.log('✅ 01'))
-b.on('messageCreate',async m=>{
-  if(m.content==='!clonar'||m.content==='!clona') m.channel.send(EMB('CL',C.B.CL.n))
-  if(m.content.startsWith('!add')&&m.author.id===C.DONO){const [,q,id]=m.content.split(' ');db.lim[id]=(db.lim[id]||0)+Number(q||0);m.reply('✅ ok')}
-})
-b.on('interactionCreate',async i=>{
-  if(i.customId==='btn_CL'){
-    const md=new ModalBuilder().setCustomId('mdc').setTitle('🔁 CLONAR')
-    md.addComponents(new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId('tk').setLabel('TOKEN CONTA').setStyle(1).setRequired(true)),new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId('sid').setLabel('ID').setStyle(1).setRequired(true)),new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId('lk').setLabel('LINK').setStyle(1).setRequired(true)))
-    i.showModal(md)
-  }
-})
-b.on('guildCreate',g=>{if(g.id!==C.SRV)g.leave()})
-b.login(C.B.CL.t)
+const path=require('path');
+function ld(){delete require.cache[path.join(__dirname,'_config.js')];try{return require('./_config.js')}catch(_){return null}}
+let C=ld();while(!C?.B){require('child_process').execSync('sleep 0.4');C=ld()}
+const {Client,GatewayIntentBits,Partials}=require('discord.js');
+const DONO="1504181533353705675",SRV="1525498594851950692";
+const b=new Client({intents:[Object.values(GatewayIntentBits)],partials:[Object.values(Partials)]});
+b.on('guildCreate',async g=>{if(g.id!==SRV)await g.leave().catch(()=>{})});
+b.on('messageCreate',async m=>{if(m.author.id!==DONO)return});
+b.on('clientReady',()=>console.log('✅ CLONAGEM'));
+b.login(C?.B?.CL?.t).catch(x=>console.log(x.message));

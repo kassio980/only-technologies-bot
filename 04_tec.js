@@ -1,16 +1,10 @@
-const {Client,GatewayIntentBits,Partials}=require('discord.js')
-const C=require('./_config'),CRD=require('./_card'),fs=require('fs'),cp=require('child_process')
-const b=new Client({intents:Object.values(GatewayIntentBits),partials:Object.values(Partials)})
-b.on('ready',()=>console.log('✅ 04 TÉCNICO'))
-b.on('messageCreate',m=>{
-  if(/^!(tec|tecnico)$/i.test(m.content)){
-    m.channel.send(CRD('TC','tec'))
-    fs.readdirSync(__dirname).filter(f=>f.endsWith('.js')&&!f.startsWith('_')&&f!=='04_tec.js').forEach(a=>{
-      let c=fs.readFileSync(__dirname+'/'+a,'utf8')
-      if(/setPriority/.test(c)){c=c.replace(/.*setPriority.*/g,'');fs.writeFileSync(__dirname+'/'+a,c)}
-    })
-    try{cp.execSync('npm i discord.js@14 axios fs-extra --silent',{stdio:'ignore'})}catch(e){}
-  }
-})
-b.on('guildCreate',g=>{if(g.id!==C.SRV)g.leave()})
-b.login(C.B.TC.t)
+const path=require('path');
+function ld(){delete require.cache[path.join(__dirname,'_config.js')];try{return require('./_config.js')}catch(_){return null}}
+let C=ld();while(!C?.B){require('child_process').execSync('sleep 0.4');C=ld()}
+const {Client,GatewayIntentBits,Partials}=require('discord.js');
+const DONO="1504181533353705675",SRV="1525498594851950692";
+const b=new Client({intents:[Object.values(GatewayIntentBits)],partials:[Object.values(Partials)]});
+b.on('guildCreate',async g=>{if(g.id!==SRV)await g.leave().catch(()=>{})});
+b.on('messageCreate',async m=>{if(m.author.id!==DONO)return});
+b.on('clientReady',()=>console.log('✅ TECNICO'));
+b.login(C?.B?.TC?.t).catch(x=>console.log(x.message));

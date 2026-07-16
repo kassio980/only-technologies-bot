@@ -1,4 +1,3 @@
-# 🔴 NUNCA ENVIE ISSO PARA NENHUM LUGAR
 _config.js
 .env
 .env.*
@@ -8,12 +7,7 @@ _config.js
 tokens*
 senhas*
 credenciais*
-
-# 📦 Coisas geradas automaticamente
 node_modules
 package-lock.json
 yarn.lock
 .DS_Store
-.cache
-dist
-build

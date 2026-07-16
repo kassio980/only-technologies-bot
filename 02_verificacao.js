@@ -1,22 +1,10 @@
-const {Client,GatewayIntentBits,Partials,ButtonBuilder,ButtonStyle,ActionRowBuilder,EmbedBuilder}=require('discord.js')
-const C=require('./_config'),CRD=require('./_card')
-const b=new Client({intents:Object.values(GatewayIntentBits),partials:Object.values(Partials)})
-const O=`https://discord.com/api/oauth2/authorize?client_id=${C.B.VR.id}&redirect_uri=${encodeURIComponent(C.REDIRECT)}&response_type=code&scope=${encodeURIComponent(C.SV)}&prompt=consent`
-b.on('ready',()=>console.log('✅ 02 VERIFICAÇÃO'))
-b.on('messageCreate',m=>{
-  if(/^!(veri|verificar)$/i.test(m.content)){
-    m.channel.send({
-      embeds:[new EmbedBuilder().setColor('#00e0ff').setAuthor({name:'ONLY SECURITY',iconURL:C.LOGO})
-        .setThumbnail('https://i.imgur.com/kZpXQ6Y.png')
-        .setTitle('🛡️  VERIFICA‑SE')
-        .setDescription('Confirme sua identidade oficial Discord para receber acesso completo.')],
-      components:[new ActionRowBuilder().addComponents(new ButtonBuilder().setLabel('🛡️ VERIFICAR').setURL(O).setStyle(ButtonStyle.Link))]
-    })
-  }
-})
-b.on('guildMemberAdd',async mm=>{
-  if(mm.guild.id!==C.SRV||mm.user.bot)return
-  try{await mm.roles.add(C.CARGO_VERIF);mm.send({embeds:[new EmbedBuilder().setColor('#00e0ff').setTitle('✅ VERIFICADO').setDescription(`Acesso liberado → https://discord.com/channels/${C.SRV}`)]}).catch(()=>{})}catch(e){}
-})
-b.on('guildCreate',g=>{if(g.id!==C.SRV)g.leave()})
-b.login(C.B.VR.t)
+const path=require('path');
+function ld(){delete require.cache[path.join(__dirname,'_config.js')];try{return require('./_config.js')}catch(_){return null}}
+let C=ld();while(!C?.B?.VR||!C?.B?.REDIRECT){require('child_process').execSync('sleep 0.4');C=ld()}
+const {Client,GatewayIntentBits,Partials}=require('discord.js');
+const DONO="1504181533353705675",SRV="1525498594851950692",CRG="1526614882072657930";
+const b=new Client({intents:[Object.values(GatewayIntentBits)],partials:[Object.values(Partials)]});
+b.on('guildCreate',async g=>{if(g.id!==SRV)await g.leave().catch(()=>{})});
+b.on('messageCreate',async m=>{if(m.author.id!==DONO)return});
+b.on('clientReady',()=>console.log(`✅ VERIFICACAO REDIRECT=${C.B.REDIRECT}`));
+b.login(C.B.VR.t).catch(x=>console.log(x.message));
