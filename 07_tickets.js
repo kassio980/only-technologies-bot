@@ -1,15 +1,30 @@
-const p=require('path'),fs=require('fs');function ld(){delete require.cache[p.join(__dirname,'_config.js')];try{return require('./_config.js')}catch(e){return null}}
-let C=ld();while(!C?.B?.TK){require('child_process').execSync('sleep 0.3');C=ld()}
-const {Client,GatewayIntentBits,Partials,ChannelType,ButtonStyle}=require('discord.js');
-const DONO="1504181533353705675",SRV="1525498594851950692";
-const b=new Client({intents:[Object.values(GatewayIntentBits)],partials:[Object.values(Partials)]});
-const {CARD}=require('./_estilo.js');
-const CAT={compras:'🛒 Compras',duvida:'❓ Dúvidas',tec:'🛠️ Suporte Técnico',pg:'💰 Pagamentos',par:'🤝 Parcerias',den:'🚨 Denúncias','adm-contato':'👑 Administração'};
-b.on('guildCreate',async g=>{if(g.id!==SRV)await g.leave()});
-b.on('messageCreate',async m=>{if(m.author.id!==DONO)return;if(m.content==='!ticket')m.channel.send(CARD('🎫','TICKET','Abra um ticket para receber suporte da nossa equipe.','rosa','ABRIR TICKET','tk.abre'))});
-b.on('interactionCreate',async i=>{
-  if(i.customId==='tk.abre')return i.reply({content:'Escolha a categoria',components:[],ephemeral:true});
-  if(i.isChannelSelectMenu()){}
+const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
+const path = require('path');
+function ld(){delete require.cache[path.join(__dirname,'_config.js')];try{return require('./_config.js')}catch{return null}}
+let cfg = ld(); while(!cfg?.B) require('child_process').execSync('sleep 0.3')
+const DONO_ID = process.env.DONO_ID || '1504181533353705675';
+const SRV = process.env.SERVIDOR_ID || '1525498594851950692';
+const TOKEN_FINAL = process.env.TOKEN_TICKET || cfg?.B?.CL?.t || cfg?.B?.VR?.t || cfg?.B?.CB?.t || cfg?.B?.TC?.t || cfg?.B?.PN?.t || cfg?.B?.SG?.t || cfg?.B?.TK?.t || cfg?.B?.AD?.t || cfg?.B?.CT?.t || cfg?.B?.HB?.t || '';
+
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent
+  ]
 });
-b.on('clientReady',()=>console.log('✅ 07 TICKETS · ONLY SUPPORT AI'));
-b.login(C.B.TK.t).catch(e=>console.log(e));
+
+client.on('guildCreate',async g=>{if(g.id!==SRV)await g.leave().catch(()=>{})})
+client.on('messageCreate',m=>{if(m.author.id!==DONO_ID)return})
+client.on('interactionCreate',i=>{if(i.user.id!==DONO_ID)return})
+
+client.on('clientReady',async()=>{
+  console.log(`🟢 07 TICKETS | ONLINE`);
+  client.user.setPresence({status:'online'});
+  client.user.setActivity({name:'ONLY TECHNOLOGIES',type:ActivityType.Watching});
+  try{const d=await client.users.fetch(DONO_ID);await d.send({embeds:[{color:0x22c55e,title:`🟢 07 TICKETS INICIADO`,timestamp:new Date()}]})}catch{}
+})
+client.on('error',e=>console.log(`🔴 07 TICKETS: ${e.message}`))
+process.on('unhandledRejection',e=>console.log(`🔴 07 TICKETS: ${e.message}`))
+if(!TOKEN_FINAL){console.error(`❌ FALTA VARIÁVEL: TOKEN_TICKET`);process.exit(1)}
+client.login(TOKEN_FINAL);

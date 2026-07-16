@@ -1,12 +1,30 @@
-const p=require('path');function ld(){delete require.cache[p.join(__dirname,'_config.js')];try{return require('./_config.js')}catch(e){return null}}
-let C=ld();while(!C?.B?.CT){require('child_process').execSync('sleep 0.3');C=ld()}
-const {Client,GatewayIntentBits,Partials}=require('discord.js');
-const DONO="1504181533353705675",SRV="1525498594851950692";
-const b=new Client({intents:[Object.values(GatewayIntentBits)],partials:[Object.values(Partials)]});
-const {CARD}=require('./_estilo.js');
-b.on('guildCreate',async g=>{if(g.id!==SRV)await g.leave()});
-b.on('guildMemberAdd',async m=>{if(m.guild.id!==SRV)return;const c=m.guild.channels.cache.find(x=>x.name.includes('bem-vindo')||x.name.includes('entrada'));c?.send(`🎉 Bem-vindo ao ONLY TECHNOLOGIES!\nAqui você encontra os melhores sistemas de bots para Discord, com qualidade, segurança e inovação. Aproveite nossos serviços e tenha uma ótima experiência em nossa comunidade!`)})
-b.on('guildMemberRemove',async m=>{if(m.guild.id!==SRV)return;const c=m.guild.channels.cache.find(x=>x.name.includes('saída')||x.name.includes('saida'));c?.send(`👋 Você saiu do ONLY TECHNOLOGIES.\nSentiremos sua falta. Estamos sempre melhorando nossos sistemas e esperamos que um dia você volte para conferir todas as novidades!`)})
-b.on('messageCreate',async m=>{if(m.author.id!==DONO)return;if(m.content==='!control'||m.content==='!CONTROLE')m.channel.send(CARD('⚙️','ONLY CONTROL','Gerencie tudo em um só lugar.','roxo','ABRIR CONTROLE','ctl.menu'))});
-b.on('clientReady',()=>console.log('✅ 09 CONTROL · ONLY CONTROL completo'));
-b.login(C.B.CT.t).catch(e=>console.log(e));
+const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
+const path = require('path');
+function ld(){delete require.cache[path.join(__dirname,'_config.js')];try{return require('./_config.js')}catch{return null}}
+let cfg = ld(); while(!cfg?.B) require('child_process').execSync('sleep 0.3')
+const DONO_ID = process.env.DONO_ID || '1504181533353705675';
+const SRV = process.env.SERVIDOR_ID || '1525498594851950692';
+const TOKEN_FINAL = process.env.TOKEN_CONTROL || cfg?.B?.CL?.t || cfg?.B?.VR?.t || cfg?.B?.CB?.t || cfg?.B?.TC?.t || cfg?.B?.PN?.t || cfg?.B?.SG?.t || cfg?.B?.TK?.t || cfg?.B?.AD?.t || cfg?.B?.CT?.t || cfg?.B?.HB?.t || '';
+
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent
+  ]
+});
+
+client.on('guildCreate',async g=>{if(g.id!==SRV)await g.leave().catch(()=>{})})
+client.on('messageCreate',m=>{if(m.author.id!==DONO_ID)return})
+client.on('interactionCreate',i=>{if(i.user.id!==DONO_ID)return})
+
+client.on('clientReady',async()=>{
+  console.log(`🟢 09 CONTROL | ONLINE`);
+  client.user.setPresence({status:'online'});
+  client.user.setActivity({name:'ONLY TECHNOLOGIES',type:ActivityType.Watching});
+  try{const d=await client.users.fetch(DONO_ID);await d.send({embeds:[{color:0x22c55e,title:`🟢 09 CONTROL INICIADO`,timestamp:new Date()}]})}catch{}
+})
+client.on('error',e=>console.log(`🔴 09 CONTROL: ${e.message}`))
+process.on('unhandledRejection',e=>console.log(`🔴 09 CONTROL: ${e.message}`))
+if(!TOKEN_FINAL){console.error(`❌ FALTA VARIÁVEL: TOKEN_CONTROL`);process.exit(1)}
+client.login(TOKEN_FINAL);
