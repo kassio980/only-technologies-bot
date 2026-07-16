@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits, ActivityType, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { Client, GatewayIntentBits, ActivityType, EmbedBuilder, PermissionsBitField } = require('discord.js');
 const path = require('path');
 
 process.env.NODE_ENV = 'production';
@@ -27,6 +27,7 @@ const client = new Client({
 client.on('guildCreate', async g => { if(g.id !== SRV_ID) await g.leave().catch(()=>{}) });
 
 client.on('messageCreate', async msg => {
+  if(msg.author.bot) return;
   if(msg.author.id !== DONO_ID) return;
   const cmd = msg.content.trim().toLowerCase();
 
@@ -42,21 +43,21 @@ client.on('messageCreate', async msg => {
 
 client.on('interactionCreate', async inter => {
   if(inter.user.id !== DONO_ID) return;
-  if(inter.customId === 'verificar_conta') return inter.reply('✅ Verificação concluída com sucesso!',{ephemeral:true});
+  if(inter.customId === 'verificar_conta') return inter.reply({content:'✅ Verificação concluída com sucesso!',ephemeral:true});
 });
 
-client.on('clientReady', async () => {
-  console.log(`🟢 10 HUB IA | ONLINE`);
+client.on('ready', async () => {
+  console.log(`🟢 10 HUB IA | ONLINE E RESPONDENDO`);
   client.user.setPresence({status:'online'});
   client.user.setActivity({name:'ONLY TECHNOLOGIES', type: ActivityType.Watching});
-  try{ await (await client.users.fetch(DONO_ID)).send(`🟢 10 HUB IA INICIADO`); }catch{}
+  try{ await (await client.users.fetch(DONO_ID)).send(`🟢 10 HUB IA INICIADO COM SUCESSO`); }catch{}
 });
 
 client.on('error', e => console.log(`🔴 10 HUB IA ERRO: ${e.message}`));
 process.on('unhandledRejection', e => console.log(`🔴 10 HUB IA: ${e}`));
 
 if(!TOKEN_USAR || TOKEN_USAR.length < 20) {
-  console.error(`❌ VARIAVEL ${TOKEN_HUB} NAO ENCONTRADA`);
+  console.error(`❌ VARIAVEL ${TOKEN_HUB} NAO ENCONTRADA OU VAZIA`);
   process.exit(1);
 }
 client.login(TOKEN_USAR);
