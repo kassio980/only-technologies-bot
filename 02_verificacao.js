@@ -30,14 +30,14 @@ client.on('messageCreate', async msg => {
   if(msg.author.id !== DONO_ID) return;
   const cmd = msg.content.trim().toLowerCase();
 
-  if(cmd === 'hub') return msg.reply({embeds:[new EmbedBuilder().setColor('#22c55e').setTitle('🤖 10 HUB IA ONLINE').setDescription('Sistema de inteligência e comando geral ativo ✅')]});
-  if(cmd === 'veri' || cmd === 'verificar') return msg.reply({embeds:[new EmbedBuilder().setColor('#3b82f6').setTitle('🛡️ ONLY VERIFICAÇÃO').setDescription('Sistema de verificação carregado ✅')]});
-  if(cmd === 'ia') return msg.reply({embeds:[new EmbedBuilder().setColor('#8b5cf6').setTitle('🧠 IA INTEGRADA').setDescription('Pergunte qualquer coisa que eu ajudo ✅')]});
-  if(cmd === 'status' || cmd === 'statu') return msg.reply({embeds:[new EmbedBuilder().setColor('#f59e0b').setTitle('📊 STATUS GERAL').setDescription(`Sistema rodando\nHorário: ${new Date().toLocaleString('pt-BR',{timeZone:'America/Bahia'})}`)]});
-  if(cmd === 'clonar') return msg.reply({embeds:[new EmbedBuilder().setColor('#ec4899').setTitle('📂 SISTEMA DE CLONAGEM').setDescription('Pronto para uso ✅')]});
-  if(cmd === 'cria' || cmd === 'criador') return msg.reply({embeds:[new EmbedBuilder().setColor('#06b6d4').setTitle('⚙️ CRIADOR DE BOTS').setDescription('Ferramenta de criação ativa ✅')]});
-  if(cmd === 'cpainel' || cmd === 'painel') return msg.reply({embeds:[new EmbedBuilder().setColor('#a855f7').setTitle('🖥️ PAINEL DE CONTROLE').setDescription('Interface web disponível ✅')]});
-  if(cmd === 'adm' || cmd === 'admin') return msg.reply({embeds:[new EmbedBuilder().setColor('#ef4444').setTitle('👑 PAINEL ADMINISTRADOR').setDescription('Acesso exclusivo liberado ✅')]});
+  if(cmd === '!hub') return msg.reply({embeds:[new EmbedBuilder().setColor('#22c55e').setTitle('🤖 10 HUB IA ONLINE').setDescription('Sistema de inteligência e comando geral ativo ✅')]});
+  if(cmd === '!veri' || cmd === '!verificar') return msg.reply({embeds:[new EmbedBuilder().setColor('#3b82f6').setTitle('🛡️ ONLY VERIFICAÇÃO').setDescription('Sistema de verificação carregado ✅')]});
+  if(cmd === '!ia') return msg.reply({embeds:[new EmbedBuilder().setColor('#8b5cf6').setTitle('🧠 IA INTEGRADA').setDescription('Pergunte qualquer coisa que eu ajudo ✅')]});
+  if(cmd === '!status' || cmd === '!statu') return msg.reply({embeds:[new EmbedBuilder().setColor('#f59e0b').setTitle('📊 STATUS GERAL').setDescription(`Sistema rodando\nHorário: ${new Date().toLocaleString('pt-BR',{timeZone:'America/Bahia'})}`)]});
+  if(cmd === '!clonar') return msg.reply({embeds:[new EmbedBuilder().setColor('#ec4899').setTitle('📂 SISTEMA DE CLONAGEM').setDescription('Pronto para uso ✅')]});
+  if(cmd === '!cria' || cmd === '!criador') return msg.reply({embeds:[new EmbedBuilder().setColor('#06b6d4').setTitle('⚙️ CRIADOR DE BOTS').setDescription('Ferramenta de criação ativa ✅')]});
+  if(cmd === '!cpainel' || cmd === '!painel') return msg.reply({embeds:[new EmbedBuilder().setColor('#a855f7').setTitle('🖥️ PAINEL DE CONTROLE').setDescription('Interface web disponível ✅')]});
+  if(cmd === '!adm' || cmd === '!admin') return msg.reply({embeds:[new EmbedBuilder().setColor('#ef4444').setTitle('👑 PAINEL ADMINISTRADOR').setDescription('Acesso exclusivo liberado ✅')]});
 });
 
 client.on('interactionCreate', async inter => {
@@ -46,20 +46,17 @@ client.on('interactionCreate', async inter => {
 });
 
 client.on('clientReady', async () => {
-  console.log(`🟢 02 VERIFICAÇÃO | ONLINE E RESPONDENDO`);
+  console.log(`🟢 02 VERIFICAÇÃO | ONLINE`);
   client.user.setPresence({status:'online'});
   client.user.setActivity({name:'ONLY TECHNOLOGIES', type: ActivityType.Watching});
-  try{
-    const voce = await client.users.fetch(DONO_ID);
-    await voce.send({embeds:[new EmbedBuilder().setColor('#22c55e').setTitle(`🟢 02 VERIFICAÇÃO INICIADO`).setDescription('Todos comandos funcionando ✅')]});
-  }catch{}
+  try{ await (await client.users.fetch(DONO_ID)).send(`🟢 02 VERIFICAÇÃO INICIADO`); }catch{}
 });
 
 client.on('error', e => console.log(`🔴 02 VERIFICAÇÃO ERRO: ${e.message}`));
-process.on('unhandledRejection', e => console.log(`🔴 02 VERIFICAÇÃO: ${e.message}`));
+process.on('unhandledRejection', e => console.log(`🔴 02 VERIFICAÇÃO: ${e}`));
 
-if(!TOKEN_USAR || TOKEN_USAR.length < 40) {
-  console.error(`❌ ERRO: Variável ${TOKEN_VERIFICACAO} não encontrada ou vazia`);
+if(!TOKEN_USAR || TOKEN_USAR.length < 20) {
+  console.error(`❌ VARIAVEL ${TOKEN_VERIFICACAO} NAO ENCONTRADA`);
   process.exit(1);
 }
 client.login(TOKEN_USAR);
