@@ -1,1 +1,0 @@
-{"name":"only-technologies-bot","version":"2.6.0","main":"SUPERVISOR_UNICO.js","engines":{"node":">=20.0.0"},"scripts":{"start":"node SUPERVISOR_UNICO.js"},"dependencies":{"discord.js":"^14.16.3"}}
