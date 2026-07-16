@@ -1,17 +1,19 @@
-# 🔴 NUNCA ENVIAR — BLOQUEIO TOTAL ABSOLUTO
+# 🔴 NUNCA ENVIE ISSO PARA NENHUM LUGAR
 _config.js
-**/_config.js
 .env
 .env.*
-BACKUP*/
-backup*/
 *.log
-*.BACKUP*
-*.BKP*
-tudo.js
-tudo.js.*
-*.old
-*.bak
-node_modules/
-.DS_Store
+*.key
+*.pem
+tokens*
+senhas*
+credenciais*
+
+# 📦 Coisas geradas automaticamente
+node_modules
 package-lock.json
+yarn.lock
+.DS_Store
+.cache
+dist
+build
